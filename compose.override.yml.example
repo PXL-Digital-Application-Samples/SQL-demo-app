@@ -1,0 +1,35 @@
+# compose.override.yml.example
+# Copy to compose.override.yml for local development settings
+
+services:
+  postgres:
+    # Mount additional SQL files for development
+    volumes:
+      - ./migrations:/docker-entrypoint-initdb.d/migrations:ro
+    environment:
+      # Enable query logging for development
+      POSTGRES_INITDB_ARGS: "-c log_statement=all"
+
+  postgrest:
+    environment:
+      # Enable development features
+      PGRST_DB_POOL: 10
+      PGRST_DB_POOL_TIMEOUT: 10
+      PGRST_SERVER_PROXY_URI: http://localhost:3000
+      PGRST_LOG_LEVEL: info
+      # Uncomment for JWT authentication
+      # PGRST_JWT_SECRET: "your-secret-key-at-least-32-characters-long"
+      # PGRST_JWT_AUD: "your-audience"
+
+  # Add pgAdmin for database management
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: user_api_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
