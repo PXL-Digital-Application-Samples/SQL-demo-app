@@ -34,7 +34,7 @@ cp .env.example .env
 
 3. Start the services:
 ```bash
-docker-compose up -d
+docker compose up -d
 # or using make
 make up
 ```
@@ -99,6 +99,8 @@ curl -X POST http://localhost:3000/rpc/update_user \
 ├── init-roles.sql       # PostgREST roles setup
 ├── .env.example         # Environment variables template
 ├── Makefile             # Convenience commands
+├── migrations/          # Database migration files
+│   └── 02_add_user_fields.sql
 └── README.md            # This file
 ```
 
@@ -116,21 +118,21 @@ Edit the `.env` file to customize:
 ```bash
 make db-shell
 # or
-docker-compose exec postgres psql -U postgres -d userdb
+docker compose exec postgres psql -U postgres -d userdb
 ```
 
 ### View Logs
 ```bash
 make logs
 # or
-docker-compose logs -f
+docker compose logs -f
 ```
 
 ### Restart Services
 ```bash
 make restart
 # or
-docker-compose restart
+docker compose restart
 ```
 
 ## 🧹 Cleanup
@@ -139,5 +141,5 @@ To stop and remove all containers and volumes:
 ```bash
 make clean
 # or
-docker-compose down -v
+docker compose down -v
 ```
